@@ -1,4 +1,4 @@
 /node_modules
 /build
 seed.sql
-*.md
+specs.md
