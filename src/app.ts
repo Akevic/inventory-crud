@@ -6,6 +6,7 @@ import { getProductById } from './routes/GET/getProductById'
 import { deleteProductById } from './routes/DELETE/deleteProductById'
 import { getProductByName } from './routes/GET/getProductByName'
 import { addProduct } from './routes/POST/addProduct'
+import { getProduct } from './routes/GET/getProduct'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -27,8 +28,8 @@ client.connect().catch((err) => {
 
 
 app.get('/products', getProducts)
+app.get('/product', getProduct)
 app.get('/products/:id', getProductById)
-app.get('/product/:name', getProductByName) // TODO: FIX IT
 app.post('/product', addProduct) // * ne radi
 app.delete('/products/:id', deleteProductById)
 
