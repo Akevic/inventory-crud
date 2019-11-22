@@ -1,11 +1,8 @@
 import express from 'express'
 import bodyParser from 'body-parser'
 import { Client } from 'pg'
-import { getProducts } from './routes/GET/getProducts'
-import { getProductById } from './routes/GET/getProductById'
-import { getProduct } from './routes/GET/getProduct'
-import { addProduct } from './routes/POST/addProduct'
-import { deleteProduct } from './routes/DELETE/deleteProductById'
+import { ProductController } from './controller/ProductController'
+import { ProductService } from './service/ProductService'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -25,12 +22,13 @@ client.connect().catch((err) => {
   process.exit(1)
 })
 
+const productService = new ProductService(client)
+const productController = new ProductController(productService)
 
-app.get('/products', getProducts)
-app.get('/product', getProduct)
-app.get('/products/:id', getProductById)
-app.post('/product', addProduct)
-app.delete('/product', deleteProduct)
+app.get('/products', productController.listProducts.bind(productController))
+app.get('/products/:id', productController.listProductsById.bind(productController))
+app.post('/products', productController.addProduct.bind(productController))
+app.delete('/products/:id', productController.deleteProductById.bind(productController))
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}.`)
