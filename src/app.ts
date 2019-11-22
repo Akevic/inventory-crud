@@ -4,7 +4,6 @@ import { Client } from 'pg'
 import { getProducts } from './routes/GET/getProducts'
 import { getProductById } from './routes/GET/getProductById'
 import { deleteProductById } from './routes/DELETE/deleteProductById'
-import { getProductByName } from './routes/GET/getProductByName'
 import { addProduct } from './routes/POST/addProduct'
 import { getProduct } from './routes/GET/getProduct'
 
@@ -30,7 +29,7 @@ client.connect().catch((err) => {
 app.get('/products', getProducts)
 app.get('/product', getProduct)
 app.get('/products/:id', getProductById)
-app.post('/product', addProduct) // * ne radi
+app.post('/product', addProduct)
 app.delete('/products/:id', deleteProductById)
 
 app.listen(PORT, () => {
