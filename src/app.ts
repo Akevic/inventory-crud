@@ -3,9 +3,9 @@ import bodyParser from 'body-parser'
 import { Client } from 'pg'
 import { getProducts } from './routes/GET/getProducts'
 import { getProductById } from './routes/GET/getProductById'
-import { deleteProductById } from './routes/DELETE/deleteProductById'
-import { addProduct } from './routes/POST/addProduct'
 import { getProduct } from './routes/GET/getProduct'
+import { addProduct } from './routes/POST/addProduct'
+import { deleteProduct } from './routes/DELETE/deleteProductById'
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -30,7 +30,7 @@ app.get('/products', getProducts)
 app.get('/product', getProduct)
 app.get('/products/:id', getProductById)
 app.post('/product', addProduct)
-app.delete('/products/:id', deleteProductById)
+app.delete('/product', deleteProduct)
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}.`)

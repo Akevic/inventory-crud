@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import { client } from "../../app";
 
-export const deleteProductById: RequestHandler = async (req, res, next) => {
-  const { rows } = await client.query(`DELETE FROM products WHERE id = ${req.params.id}`)
+export const deleteProduct: RequestHandler = async (req, res, next) => {
+  const { rows } = await client.query(`DELETE FROM products WHERE ${req.query.propname} = '${req.query.propvalue}'`)
   res.send('success')
 }
