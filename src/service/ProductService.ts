@@ -1,4 +1,4 @@
-import { RequestHandler, Request } from "express-serve-static-core"
+import { Request } from "express-serve-static-core"
 import { Client } from "pg"
 import { Product } from "../model/ProductModel"
 
@@ -8,8 +8,16 @@ export class ProductService {
 
   constructor (private readonly client: Client) {}
 
-  async list (): Promise<Product[]> {
-    const { rows } = await this.client.query('SELECT * FROM products')
+  async list (params?: ListProductsParams): Promise<Product[]> {
+    let query = `SELECT * FROM products`
+    const binds = []
+
+    if (params?.filter) {
+      query += ` WHERE name ILIKE $1`
+      binds.push(`%${params.filter}%`)
+    }
+
+    const { rows } = await this.client.query(query, binds)
 
     return rows
   }
@@ -31,4 +39,17 @@ export class ProductService {
 
     return rows
   }
+
+  async searchProducts (req: Request): Promise<Product[]> {
+    const query = `%${req.query.name}%`
+    const { rows } = await this.client.query(`SELECT * FROM products WHERE name ILIKE $1`, [query])
+
+    return rows
+  }
+}
+
+export type ListProductsParams = {
+  filter?: string
+  limit?: number
+  page?: number
 }
