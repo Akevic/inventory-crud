@@ -5,7 +5,6 @@ import { knex } from "../app"
 
 
 export class ProductService {
-  // ! TU IDU METODE (FUNKCIJE VEZANE ZA PRODUCT)
 
   constructor (private readonly client: Client) {}
 
@@ -19,11 +18,11 @@ export class ProductService {
     }
 
     if (params?.limit) {
-        query = query.limit(params.limit) // ! moras ovo fixat
+        query = query.limit(`${+params.limit}%`)
     }
 
     if (params?.page) {
-      query = query.offset(params.page) // ! i ovo isto
+      query = query.offset(`${+params.page}%`)
     }
 
     return query
