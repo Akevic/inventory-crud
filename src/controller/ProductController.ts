@@ -21,27 +21,20 @@ export class ProductController {
 
     const products = await this.productService.list(params)
     res.json({ products })
-    res.send(200)
   }
 
   async listProductsById (req: Request, res: Response, next: NextFunction) {
     const products = await this.productService.listById(req)
     res.send({ products })
-    res.send(200)
   }
 
   async deleteProductById (req: Request, res: Response, next: NextFunction) {
     await this.productService.deleteById(req)
-    res.send(200)
+    res.sendStatus(200)
   }
 
   async addProduct (req: Request, res: Response, next: NextFunction) {
     const product = await this.productService.createProduct(req)
-    res.send(200)
-  }
-
-  async searchProduct (req: Request, res: Response, next: NextFunction) {
-    const products = await this.productService.searchProducts(req)
-    res.send(products)
+    res.sendStatus(200)
   }
 }
