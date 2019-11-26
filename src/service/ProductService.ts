@@ -1,9 +1,10 @@
 import { Request } from "express-serve-static-core"
 import { Product } from "../model/ProductModel"
 import { Client } from "../app"
+import Knex from 'knex'
 export class ProductService {
 
-  constructor (private readonly client: any) {}
+  constructor (private readonly client: Knex) {}
 
   async list (params?: ListProductsParams): Promise<Product[]> {
     let query = this.client
