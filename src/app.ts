@@ -1,6 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
-import { Client } from 'pg'
+import knex from 'knex'
 import { ProductController } from './controller/ProductController'
 import { ProductService } from './service/ProductService'
 import { database } from './config'
@@ -10,24 +10,9 @@ const PORT = process.env.PORT || 3000
 
 app.use(bodyParser.json())
 
-export const client = new Client(database)
+export const Client = knex(database)
 
-export const knex = require('knex')({
-  client: 'pg',
-  connection: {
-    host : 'localhost',
-    user : 'simun',
-    password : 'developer',
-    database : 'inventory-app'
-  }
-});
-
-client.connect().catch((err) => {
-  console.error('error connecting to database: %s', err.message)
-  process.exit(1)
-})
-
-const productService = new ProductService(client)
+const productService = new ProductService(Client)
 const productController = new ProductController(productService)
 
 app.get('/products', productController.listProducts.bind(productController))

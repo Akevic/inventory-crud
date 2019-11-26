@@ -1,15 +1,12 @@
 import { Request } from "express-serve-static-core"
-import { Client } from "pg"
 import { Product } from "../model/ProductModel"
-import { knex } from "../app"
-
-
+import { Client } from "../app"
 export class ProductService {
 
-  constructor (private readonly client: Client) {}
+  constructor (private readonly client: any) {}
 
   async list (params?: ListProductsParams): Promise<Product[]> {
-    let query = knex
+    let query = this.client
       .from('products')
       .select('id', 'name', 'price', 'color', 'year', 'instock')
 
@@ -18,11 +15,11 @@ export class ProductService {
     }
 
     if (params?.limit) {
-        query = query.limit(`${+params.limit}%`)
+        query = query.limit(params.limit)
     }
 
     if (params?.page) {
-      query = query.offset(`${+params.page}%`)
+      query = query.offset(params.page)
     }
 
     return query
@@ -30,29 +27,35 @@ export class ProductService {
   }
 
   async listById (req: Request): Promise<Product[]> {
-    return knex
+    const query = Client
       .from('products')
       .select('id', 'name', 'price', 'color', 'year', 'instock')
       .where('id', req.params.id)
+
+    return query
   }
 
-  async deleteById (req: Request): Promise<Product[]> {
-    return knex
-      .from('products')
-      .where('id', req.params.id)
-      .del()
+  async deleteById (req: Request): Promise<number> {
+    const query = Client
+    .from('products')
+    .where('id', req.params.id)
+    .del()
+
+    return query
   }
 
-  async createProduct (req: Request): Promise<Product[]> {
-    return knex
-      .from('products')
-      .insert({
-        name: req.body.name,
-        price: req.body.price,
-        year: req.body.year,
-        color: req.body.color,
-        instock: req.body.instock
-      })
+  async createProduct (req: Request): Promise<number[]> {
+    const query = Client
+    .from('products')
+    .insert({
+      name: req.body.name,
+      price: req.body.price,
+      year: req.body.year,
+      color: req.body.color,
+      instock: req.body.instock
+    })
+
+    return query
   }
 }
 

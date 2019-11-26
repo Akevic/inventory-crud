@@ -34,7 +34,7 @@ export class ProductController {
   }
 
   async addProduct (req: Request, res: Response, next: NextFunction) {
-    const product = await this.productService.createProduct(req)
+    await this.productService.createProduct(req)
     res.sendStatus(200)
   }
 }
