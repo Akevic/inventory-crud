@@ -15,6 +15,16 @@ export class OrderController {
     res.json({ orders })
   }
 
+  async listOrderById (req: Request, res: Response, next: NextFunction) {
+    const order = await this.orderService.listById(+req.params.id)
+
+    if (!order) {
+      return
+    }
+
+    res.send(order)
+  }
+
   async deleteOrderById (req: Request, res: Response, next: NextFunction) {
     await this.orderService.deleteById(+req.params.id)
     res.sendStatus(200)

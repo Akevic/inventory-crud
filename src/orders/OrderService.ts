@@ -38,6 +38,15 @@ export class OrderService {
       return query
   }
 
+  async listById (id: number): Promise<Order> {
+    const order = await this.client
+      .from('orders')
+      .select('*')
+      .where('id', id)
+
+      return order
+  }
+
   async deleteById (id: number): Promise<void> {
     await this.client
       .from('orders')

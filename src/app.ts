@@ -24,6 +24,8 @@ app.post('/products', productController.addProduct.bind(productController))
 app.delete('/products/:id', productController.deleteProductById.bind(productController))
 
 app.get('/orders', orderController.listOrders.bind(orderController))
+app.get('/orders/:id', orderController.listOrderById.bind(orderController))
+app.delete('/orders/:id', orderController.deleteOrderById.bind(orderController))
 app.post('/orders', orderController.createOrder.bind(orderController))
 
 app.listen(PORT, () => {
