@@ -6,3 +6,10 @@ CREATE TABLE IF NOT EXISTS products (
   color int,
   inStock Boolean
 )
+
+CREATE TABLE IF NOT EXISTS productorder (
+  id serial PRIMARY KEY,
+  product varchar,
+  orderDate TIMESTAMP,
+  payment VARCHAR
+)
