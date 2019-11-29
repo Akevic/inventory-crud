@@ -15,6 +15,11 @@ export class OrderController {
     res.json({ orders })
   }
 
+  async deleteOrderById (req: Request, res: Response, next: NextFunction) {
+    await this.orderService.deleteById(+req.params.id)
+    res.sendStatus(200)
+  }
+
   async createOrder (req: Request, res: Response, next: NextFunction) {
     const params: CreateOrderParams = {
       payment: req.body.payment,

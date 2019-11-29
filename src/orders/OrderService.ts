@@ -38,6 +38,13 @@ export class OrderService {
       return query
   }
 
+  async deleteById (id: number): Promise<void> {
+    await this.client
+      .from('orders')
+      .where('id', id)
+      .del()
+  }
+
   async create (params: CreateOrderParams): Promise<Order> {
     const [order] = (await this.client
       .into('orders')
