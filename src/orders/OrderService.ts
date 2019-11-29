@@ -1,7 +1,5 @@
-import { Request } from 'express-serve-static-core'
 import { Order } from './OrderModel'
 import Knex from 'knex'
-import { promises } from 'dns'
 
 export type CreateOrderParams = {
   payment: string

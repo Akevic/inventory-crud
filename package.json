@@ -1,5 +1,5 @@
 {
-  "name": "inventory",
+  "name": "inventory-api",
   "version": "1.0.0",
   "main": "./build/app.js",
   "license": "MIT",

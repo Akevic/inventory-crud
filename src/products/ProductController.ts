@@ -1,4 +1,4 @@
-import { ProductService, ListProductsParams, CreateProductParams } from "../service/ProductService"
+import { ProductService, ListProductsParams, CreateProductParams } from "./ProductService"
 import { Request, Response, NextFunction } from "express-serve-static-core"
 
 interface ListProductsRequest extends Request {

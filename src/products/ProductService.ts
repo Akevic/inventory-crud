@@ -1,4 +1,4 @@
-import { Product } from "./ProductModel"
+import { Product } from './index'
 import Knex from 'knex'
 
 export type ListProductsParams = {

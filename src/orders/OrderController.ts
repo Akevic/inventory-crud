@@ -1,8 +1,19 @@
-import { OrderService, CreateOrderParams } from './OrderService'
+import { OrderService, CreateOrderParams, ListOrdersParams } from './OrderService'
 import { Request, Response, NextFunction } from "express-serve-static-core"
 
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
+
+  async listOrders (req: Request, res: Response, next: NextFunction) {
+    const params: ListOrdersParams = {
+      filter: req.query.filter,
+      limit: req.query.limit,
+      page: req.query.page
+    }
+
+    const orders = await this.orderService.list(params)
+    res.json({ orders })
+  }
 
   async createOrder (req: Request, res: Response, next: NextFunction) {
     const params: CreateOrderParams = {
