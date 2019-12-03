@@ -1,6 +1,5 @@
 import { Order } from './OrderModel'
 import Knex from 'knex'
-import { Product } from '../products'
 
 export type CreateOrderParams = {
   payment: string

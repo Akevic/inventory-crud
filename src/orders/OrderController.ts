@@ -20,9 +20,9 @@ export class OrderController {
       const order = await this.orderService.listById(+req.params.id)
 
       if (!order) {
-        res.status(400).json({
+        res.status(404).json({
           status: 'Error',
-          statusCode: 400,
+          statusCode: 404,
           message: 'There is no order with that ID in database'
         })
       }
