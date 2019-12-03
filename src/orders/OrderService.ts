@@ -48,7 +48,7 @@ export class OrderService {
         return order
     } catch (err) {
       if (err.code === '22P02') {
-        throw new NoOrderError('There is no order with given ID')
+        throw new NoOrderError('There is no order with that ID in database')
       }
       throw err
     }

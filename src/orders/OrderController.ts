@@ -19,7 +19,7 @@ export class OrderController {
     try {
       const order = await this.orderService.listById(+req.params.id)
 
-      if (!order) {
+      if (!order) { // ! ne virujem da je dobro?
         res.status(404).json({
           status: 'Error',
           statusCode: 404,
