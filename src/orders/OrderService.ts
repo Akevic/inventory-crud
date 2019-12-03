@@ -93,7 +93,7 @@ export class OrderService {
   }
 }
 
-class NoProductError extends Error {
+export class NoProductError extends Error {
   constructor (message: string) {
     super(message);
     this.name = 'DatabaseError';

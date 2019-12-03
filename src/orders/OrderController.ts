@@ -40,7 +40,13 @@ export class OrderController {
       const order = await this.orderService.create(params)
       res.send({ order })
     } catch (err) {
-      console.error(err)
+      if (err.name === 'DatabaseError') {
+        res.sendStatus(404)
+        console.log(err)
+      } else {
+        res.sendStatus(400)
+        console.log(err)
+      }
     }
   }
 }
