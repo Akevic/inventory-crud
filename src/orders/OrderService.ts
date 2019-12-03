@@ -40,12 +40,19 @@ export class OrderService {
   }
 
   async listById (id: number): Promise<Order> {
-    const [order] = await this.client
-      .from('orders')
-      .select('*')
-      .where('id', id)
+    try {
+      const [order] = await this.client
+        .from('orders')
+        .select('*')
+        .where('id', id)
 
-      return order
+        return order
+    } catch (err) {
+      if (err.code === '22P02') {
+        throw new NoOrderError('There is no order with given ID')
+      }
+      throw err
+    }
   }
 
   async deleteById (id: number): Promise<void> {
@@ -94,6 +101,13 @@ export class OrderService {
 }
 
 export class NoProductError extends Error {
+  constructor (message: string) {
+    super(message);
+    this.name = 'DatabaseError';
+  }
+}
+
+export class NoOrderError extends Error {
   constructor (message: string) {
     super(message);
     this.name = 'DatabaseError';

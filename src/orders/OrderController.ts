@@ -1,4 +1,4 @@
-import { OrderService, CreateOrderParams, ListOrdersParams } from './OrderService'
+import { OrderService, CreateOrderParams, ListOrdersParams, NoProductError, NoOrderError } from './OrderService'
 import { Request, Response, NextFunction } from "express-serve-static-core"
 
 export class OrderController {
@@ -16,13 +16,29 @@ export class OrderController {
   }
 
   async listOrderById (req: Request, res: Response, next: NextFunction) {
-    const order = await this.orderService.listById(+req.params.id)
+    try {
+      const order = await this.orderService.listById(+req.params.id)
 
-    if (!order) {
-      return
+      if (!order) {
+        res.status(400).json({
+          status: 'Error',
+          statusCode: 400,
+          message: 'There is no order with that ID in database'
+        })
+      }
+      res.send(order)
+
+    } catch (err) {
+      if (err instanceof NoOrderError) {
+        res.status(400).json({
+          status: 'Error',
+          statusCode: 400,
+          message: 'ID can contain only numbers'
+        })
+      } else {
+        throw err
+      }
     }
-
-    res.send(order)
   }
 
   async deleteOrderById (req: Request, res: Response, next: NextFunction) {
@@ -40,12 +56,14 @@ export class OrderController {
       const order = await this.orderService.create(params)
       res.send({ order })
     } catch (err) {
-      if (err.name === 'DatabaseError') {
-        res.sendStatus(404)
-        console.log(err)
+      if (err instanceof NoProductError) {
+        res.status(400).json({
+          status: 'Error',
+          statusCode: 400,
+          message: 'There is no product with that ID in database'
+        })
       } else {
-        res.sendStatus(400)
-        console.log(err)
+        throw err
       }
     }
   }
