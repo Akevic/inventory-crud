@@ -25,8 +25,8 @@ app.delete('/products/:id', productController.deleteProductById.bind(productCont
 
 app.get('/orders', orderController.listOrders.bind(orderController))
 app.get('/orders/:id', orderController.listOrderById.bind(orderController))
-app.delete('/orders/:id', orderController.deleteOrderById.bind(orderController))
 app.post('/orders', orderController.createOrder.bind(orderController))
+app.delete('/orders/:id', orderController.deleteOrderById.bind(orderController))
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}.`)

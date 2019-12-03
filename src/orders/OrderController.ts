@@ -35,7 +35,12 @@ export class OrderController {
       payment: req.body.payment,
       products: req.body.products || []
     }
-    const order = await this.orderService.create(params)
-    res.send({ order })
+
+    try {
+      const order = await this.orderService.create(params)
+      res.send({ order })
+    } catch (err) {
+      console.error(err)
+    }
   }
 }

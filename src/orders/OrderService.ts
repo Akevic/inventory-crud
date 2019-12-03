@@ -1,5 +1,6 @@
 import { Order } from './OrderModel'
 import Knex from 'knex'
+import { Product } from '../products'
 
 export type CreateOrderParams = {
   payment: string
@@ -39,7 +40,7 @@ export class OrderService {
   }
 
   async listById (id: number): Promise<Order> {
-    const order = await this.client
+    const [order] = await this.client
       .from('orders')
       .select('*')
       .where('id', id)
@@ -54,37 +55,47 @@ export class OrderService {
       .del()
   }
 
-  async create (params: CreateOrderParams): Promise<Order> {
-    const [order] = (await this.client
-      .into('orders')
-      .insert({
-        payment: params.payment
+  async create (params: CreateOrderParams) {
+    try {
+      const order = await this.client.transaction(async (trx): Promise<Order> => {
+        const [order] = await this.client
+          .into('orders')
+          .transacting(trx)
+          .insert({
+            payment: params.payment
+          })
+          .returning('*')
+
+        const orderItems = params.products.map(({ id: productId }) => ({
+          orderid: order.id,
+          productid: productId
+        }))
+
+        const orderProducts = await this.client
+          .into('orderproduct')
+          .transacting(trx)
+          .insert(orderItems)
+          .returning('*')
+
+        return {
+          ...order,
+          orderProducts: orderProducts
+        }
       })
-      .returning('*')) as {
-        id: number
-        payment: string | null
-        orderdate: Date | null
-      }[]
 
-    const orderItems = params.products.map(({ id: productId }) => ({
-      orderid: order.id,
-      productid: productId
-    }))
-
-    const orderProducts = (await this.client
-      // .debug(true)
-      .into('orderproduct')
-      .insert(orderItems)
-      .returning(['id', 'orderid', 'productid'])) as {
-        id: number
-        orderid: number
-        productid: number
-      }[]
-
-    return {
-      ...order,
-      // orderProducts: orderProducts.rows
-      orderProducts: orderProducts
+      return order
+    } catch (err) {
+      if (+err.code === 23503) {
+        throw new NoProductError('There is no product with that ID in database')
+      }
+        throw err
     }
+  }
+}
+
+class NoProductError extends Error {
+  constructor (message: string) {
+    super(message);
+    this.name = 'DatabaseError';
   }
 }
